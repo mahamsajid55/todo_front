@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="../static/style.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        
+        <!-- Task Form -->
+        <form id="addTaskForm" action="/add_task" method="POST" class="task-form">
+            <label for="taskTitle">Task Title</label>
+            <input type="text" name="title" id="taskTitle" placeholder="Task Title" required>
+
+            <label for="taskDescription">Task Description</label>
+            <textarea name="description" id="taskDescription" placeholder="Task Description"></textarea>
+
+            <button type="submit" class="submit-btn">Add Task</button>
+        </form>
+
+        <!-- Task List -->
+        <ul id="taskList">
+            {% for task in tasks %}
+                <li class="task-item">
+                    <div class="task-details">
+                        <strong>{{ task[1] }}</strong><br>
+                        <p>{{ task[2] }}</p>
+                    </div>
+                    <div class="task-actions">
+                        {% if task[3] %}
+                            <span class="completed">Completed</span>
+                        {% else %}
+                            <a href="{{ url_for('update_task_route', id=task[0]) }}" class="mark-completed">Mark as completed</a>
+                        {% endif %}
+                        <a href="{{ url_for('delete_task_route', id=task[0]) }}" class="delete">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
