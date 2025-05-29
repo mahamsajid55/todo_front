@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block title %}Dashboard{% endblock %}
+    
+    {% block content %}
+        <h2>Welcome back, {{ current_user.username }}!</h2>
+        
+        <form method="POST" action="{{ url_for('add_task') }}">
+            <input type="text" name="content" placeholder="What needs to be done?" required>
+            <button type="submit" class="btn">Add Task</button>
+        </form>
+        
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li>
+                {{ task.content }}
+                <a href="{{ url_for('delete_task', id=task.id) }}" class="delete" 
+                   onclick="return confirm('Are you sure?')">×</a>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    {% endblock %}
+</body>
+</html>

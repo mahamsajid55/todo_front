@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin view</title>
+</head>
+<body>
+    {% extends "base.html" %}
+
+{% block content %}
+<h1>Admin Data View</h1>
+
+<h2>Users</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Password Hash</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.password[:20] }}...</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Tasks</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Content</th>
+        <th>Completed</th>
+        <th>User ID</th>
+    </tr>
+    {% for task in tasks %}
+    <tr>
+        <td>{{ task.id }}</td>
+        <td>{{ task.content }}</td>
+        <td>{{ task.completed }}</td>
+        <td>{{ task.user_id }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+</body>
+</html>
