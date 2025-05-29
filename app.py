@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -28,6 +28,7 @@ class User(UserMixin, db.Model):
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
+    completed = db.Column(db.Boolean, default=False)  # Use 'completed' consistently
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 # Load User
@@ -35,7 +36,24 @@ class Task(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Routes
+@app.route('/admin/view_all')
+@login_required
+def view_all():
+    if current_user.username != 'admin':
+        abort(403)
+    users = User.query.all()
+    tasks = Task.query.all()
+    return render_template('admin_view.html', users=users, tasks=tasks)
+
+@app.route('/debug/data')
+def debug_data():
+    users = User.query.all()
+    tasks = Task.query.all()
+    return {
+        'users': [{'id': u.id, 'username': u.username} for u in users],
+        'tasks': [{'id': t.id, 'content': t.content, 'completed': t.completed} for t in tasks]
+    }
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -43,7 +61,7 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['username'].strip()
         password = request.form['password']
         
         if User.query.filter_by(username=username).first():
@@ -65,8 +83,10 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['username'].strip()
         password = request.form['password']
+        
+        print(f"Trying to login with username: '{username}'")  # Debug
         
         user = User.query.filter_by(username=username).first()
         
@@ -118,9 +138,8 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('home'))
 
-# Initialize Database
 with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5003)
