@@ -76,7 +76,7 @@ flask --app run.py --debug run
 http://localhost:5000
 ```
 
-## Screenshots
+## Captura pantalla
 ![Home](./imagenes/inicio.png) <br><br>
 ![register](./imagenes/register.png)<br><br>
 ![Login](./imagenes/login.png)<br><br>
