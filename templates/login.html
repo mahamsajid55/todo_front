@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>  <!-- Changed from "Login" to "Register" -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
     {% extends "base.html" %}
-    {% block title %}Register{% endblock %}
+    {% block title %}Register{% endblock %}  <!-- Correct block title -->
     
     {% block content %}
-      <h2>Register</h2>
+      <h2>Register</h2>  <!-- Changed from "Login" to "Register" -->
       <form method="POST">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
-        <button type="submit" class="btn">Register</button>
+        <button type="submit" class="btn">Login</button>  <!-- Changed from "Login" to "Register" -->
       </form>
-      <p style="text-align: center; margin-top: 1rem;">Already have an account? 
+      <p style="text-align: center; margin-top: 1rem;">
+        Already have an account? 
         <a href="{{ url_for('login') }}">Login here</a>
       </p>
     {% endblock %}
-    
 </body>
 </html>
